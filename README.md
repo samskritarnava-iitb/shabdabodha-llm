@@ -26,12 +26,31 @@ includes a small local app for trying sentences and CSV files.
 | Dataset (sentences, annotations, human scores, model outputs) | https://huggingface.co/datasets/samskritarnava-iitb/shabdabodha-dataset |
 | Gemma 3 4B LoRA adapter | https://huggingface.co/samskritarnava-iitb/gemma-3-4b-it-shabdabodha-lora |
 | Llama 3.2 3B LoRA adapter | https://huggingface.co/samskritarnava-iitb/Llama-3.2-3B-Instruct-shabdabodha-lora |
+| Hugging Face organization | https://huggingface.co/samskritarnava-iitb |
 
 ```bash
 hf download samskritarnava-iitb/shabdabodha-dataset --repo-type dataset --local-dir shabdabodha-dataset
 hf download samskritarnava-iitb/gemma-3-4b-it-shabdabodha-lora --local-dir adapters/gemma3-4b
 hf download samskritarnava-iitb/Llama-3.2-3B-Instruct-shabdabodha-lora --local-dir adapters/llama32-3b
 ```
+
+The dataset and model cards on Hugging Face link back to this repository.
+
+### Dataset at a glance
+
+| Config | Content | Rows |
+|---|---|---|
+| `sentences` | Sentences with word-level and sentence-level annotations (`train` / `validation` / `test`) | 224 (183 / 21 / 20) |
+| `human_eval_outputs` | The 198 human-evaluated sentences with the reference and four model outputs | 198 |
+| `human_eval_scores` | Word-level and sentence-level scores (1-10) from three annotators, long format | 2970 |
+| `heldout_predictions` | Outputs of four systems on the 20 test sentences | 20 |
+
+```python
+from datasets import load_dataset
+sentences = load_dataset("samskritarnava-iitb/shabdabodha-dataset", "sentences")
+```
+
+The 198 human-evaluated sentences are train/validation sentences, not test sentences; the held-out evaluation uses the 20 test sentences.
 
 ## Setup
 
@@ -75,6 +94,19 @@ If loading hangs on a network check, set `HF_HUB_OFFLINE=1` and `GRADIO_ANALYTIC
 - Annotators A1 and A2 give near-identical scores, so their ratings should not be treated as independent.
 
 See the paper for details and caveats.
+
+## Known issues
+
+These are also documented in the dataset card.
+
+- Annotations are released verbatim. Notation irregularities (alternative separators, stray hyphens, non-standard person markers,
+  finite verb forms as heads) are flagged per sentence in `notation_flags`: 78 of 224 sentences carry at least one flag.
+- In some references the verbal noun differs between the word-level and sentence-level annotation (e.g. पचन vs पाक for रामः पचति।).
+- Four human-score cells were invalid in the source sheet (a score of 99, or blank, all in the reference word-level column); they
+  are left empty with a `note`. One sentence appears twice among the 198 entries.
+- Annotators A1 and A2 give identical scores on 92% of cells (alpha 0.97) while each agrees with A3 at alpha of about 0.14, so
+  A1 and A2 should not be treated as independent.
+- The held-out test set has only 20 sentences, so differences of a few sentences are not meaningful.
 
 ## Part-2 gloss (draft)
 
