@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+data/
+adapters/
+shabdabodha-dataset/
+*.safetensors
+.DS_Store

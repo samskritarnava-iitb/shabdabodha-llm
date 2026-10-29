@@ -1,0 +1,6 @@
+mlx-lm>=0.31
+gradio>=6.0
+pandas
+numpy
+scipy
+huggingface_hub
