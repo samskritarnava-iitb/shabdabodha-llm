@@ -1,6 +1,6 @@
-"""Automatic measures for the systems in `heldout/predictions.csv` (20 held-out sentences)."""
+"""Automatic measures for the systems in `heldout/predictions.jsonl` (20 held-out sentences)."""
 import argparse
-import csv
+import json
 from pathlib import Path
 
 from sb_metrics import score
@@ -9,7 +9,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--data", default="shabdabodha-dataset")
 args = ap.parse_args()
 
-rows = list(csv.DictReader(open(Path(args.data) / "heldout" / "predictions.csv", encoding="utf-8")))
+rows = [json.loads(line) for line in open(Path(args.data) / "heldout" / "predictions.jsonl", encoding="utf-8") if line.strip()]
 gts = [r["reference_sb_sentence"] for r in rows]
 print(f"{len(rows)} sentences\n{'system':20s} balanced exact outer head  F1")
 for system in [c for c in rows[0] if c not in ("id", "sentence", "reference_sb_sentence")]:

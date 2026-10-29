@@ -21,9 +21,17 @@ includes a small local app for trying sentences and CSV files.
 
 ## Data and models
 
-The dataset (sentences, annotations, human scores, model outputs) and the two LoRA adapters are released on Hugging Face.
-Links will be added here once they are published. Download the dataset into `shabdabodha-dataset/` and the adapters into
-`adapters/gemma3-4b/` and `adapters/llama32-3b/`.
+| Resource | Link |
+|---|---|
+| Dataset (sentences, annotations, human scores, model outputs) | https://huggingface.co/datasets/samskritarnava-iitb/shabdabodha-dataset |
+| Gemma 3 4B LoRA adapter | https://huggingface.co/samskritarnava-iitb/gemma-3-4b-it-shabdabodha-lora |
+| Llama 3.2 3B LoRA adapter | https://huggingface.co/samskritarnava-iitb/Llama-3.2-3B-Instruct-shabdabodha-lora |
+
+```bash
+hf download samskritarnava-iitb/shabdabodha-dataset --repo-type dataset --local-dir shabdabodha-dataset
+hf download samskritarnava-iitb/gemma-3-4b-it-shabdabodha-lora --local-dir adapters/gemma3-4b
+hf download samskritarnava-iitb/Llama-3.2-3B-Instruct-shabdabodha-lora --local-dir adapters/llama32-3b
+```
 
 ## Setup
 

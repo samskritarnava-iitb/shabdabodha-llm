@@ -1,6 +1,5 @@
 """Human-evaluation statistics and automatic measures from the released `human_eval/` files."""
 import argparse
-import csv
 import itertools
 import json
 from pathlib import Path
@@ -18,11 +17,12 @@ root = Path(args.data) / "human_eval"
 
 outputs = [json.loads(line) for line in open(root / "outputs.jsonl", encoding="utf-8") if line.strip()]
 ids = {r["entry_id"]: i for i, r in enumerate(outputs)}
-annots = sorted({r["annotator"] for r in csv.DictReader(open(root / "scores.csv", encoding="utf-8"))})
+scores = [json.loads(line) for line in open(root / "scores.jsonl", encoding="utf-8") if line.strip()]
+annots = sorted({r["annotator"] for r in scores})
 A = np.full((len(annots), len(SYSTEMS), 2, len(outputs)), np.nan)  # annotator, system, WM/SM, entry
-for r in csv.DictReader(open(root / "scores.csv", encoding="utf-8")):
+for r in scores:
     for lv, col in enumerate(("wm_score", "sm_score")):
-        if r[col] != "":
+        if r[col] is not None:
             A[annots.index(r["annotator"]), SYSTEMS.index(r["system"]), lv, ids[r["entry_id"]]] = float(r[col])
 
 
